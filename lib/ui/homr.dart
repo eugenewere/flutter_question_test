@@ -1,6 +1,69 @@
 import 'package:TrueCitizenTest/model/question.dart';
 import 'package:flutter/material.dart';
 
+
+
+
+
+class MovieList extends StatelessWidget {
+  final List movies = [
+    "Titanic",
+    "Rambo",
+    "Avatar",
+    "300",
+    "Prison Break",
+    "Viking",
+    "Young Sheldon",
+    "Titanic",
+    "Rambo",
+    "Avatar",
+    "300",
+    "Prison Break",
+    "Viking",
+    "Young Sheldon",
+    "Titanic",
+    "Rambo",
+    "Avatar",
+    "300",
+    "Prison Break",
+    "Viking",
+    "Young Sheldon",
+
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Movies'),
+        backgroundColor: Colors.blueGrey.shade900,
+      ),
+      backgroundColor: Colors.blueGrey.shade400,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView.builder(
+            itemCount: movies.length,
+            itemBuilder: (BuildContext context, int index){
+              return Card(
+                color: Colors.white,
+                elevation: 6.0,
+                child: ListTile(
+                  title: Text(movies[index]),
+                ),
+              );
+            }
+        ),
+      ),
+    );
+  }
+}
+
+
+
+
+
+
+
 class QuizApp extends StatefulWidget {
   @override
   _QuizAppState createState() => _QuizAppState();
