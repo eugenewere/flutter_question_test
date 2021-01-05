@@ -1,3 +1,4 @@
+import 'package:TrueCitizenTest/model/movie.dart';
 import 'package:TrueCitizenTest/model/question.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +7,8 @@ import 'package:flutter/material.dart';
 
 
 class MovieList extends StatelessWidget {
+
+  final List<Movie> movieList = Movie.getMovies();
   final List movies = [
     "Titanic",
     "Rambo",
@@ -38,20 +41,145 @@ class MovieList extends StatelessWidget {
         title: Text('Movies'),
         backgroundColor: Colors.blueGrey.shade900,
       ),
+
       backgroundColor: Colors.blueGrey.shade400,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView.builder(
-            itemCount: movies.length,
+            itemCount: movieList.length,
             itemBuilder: (BuildContext context, int index){
-              return Card(
-                color: Colors.white,
-                elevation: 6.0,
-                child: ListTile(
-                  title: Text(movies[index]),
-                ),
+              // return Card(
+              //   borderOnForeground: true,
+              //   color: Colors.white,
+              //   elevation: 4.0,
+              //   child: ListTile(
+              //     trailing: Text("..."),
+              //     leading: CircleAvatar(
+              //       child: Container(
+              //         width: 250,
+              //         height: 250,
+              //         child: null,
+              //         decoration: BoxDecoration(
+              //           image: DecorationImage(
+              //             image: NetworkImage(movieList[index].images[0]),
+              //             fit: BoxFit.cover,
+              //             repeat: ImageRepeat.noRepeat,
+              //
+              //           ),
+              //           borderRadius: BorderRadius.circular(13.9),
+              //         ),
+              //       )
+              //     ),
+              //     title: Text("${movieList[index].title}"),
+              //     subtitle: Text('${movieList[index].genre}'),
+              //     onTap: (){
+              //       Navigator.push(context, MaterialPageRoute(
+              //           builder: (context)=>MovieListViewDetails(
+              //             movieName: movieList.elementAt(index).title,
+              //             movie: movieList[index],
+              //           ),
+              //       ));
+              //     },
+              //     // onTap: () => debugPrint(movies.elementAt(index)),
+              //   ),
+              //
+              // );
+              return Stack(
+                  children:[
+                     movieCard(movieList[index], context),
+                     Positioned(
+                         top:10.0,
+                         child: movieImage(movieList[index].images[0])
+                     ),
+                  ]
               );
             }
+        ),
+      ),
+    );
+  }
+  Widget movieCard(Movie movie , BuildContext context){
+    return InkWell(
+      onTap:  (){
+            Navigator.push(context, MaterialPageRoute(
+                builder: (context)=>MovieListViewDetails(
+                  movieName: movie.title,
+                  movie: movie,
+                ),
+            ));
+          },
+      child: Container(
+        margin: EdgeInsets.only(left: 60.0),
+          width: MediaQuery.of(context).size.width,
+          height: 120.0,
+          child: Card(
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 60.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(movie.title),
+                      Text("Rating ${movie.imdbRating}/10"),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text("Released: ${movie.released}"),
+                      Text(movie.runtime),
+                      Text(movie.rated),
+                    ],
+                  ),
+
+                ],
+              ),
+            ),
+          ),
+      ),
+    );
+  }
+  Widget movieImage(String imageUrl){
+    return Container(
+      width: 100,
+      height: 100,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        image: DecorationImage(
+          fit: BoxFit.cover,
+          image: NetworkImage(imageUrl ?? "https://png.pngtree.com/element_our/20200610/ourmid/pngtree-black-default-avatar-image_2237212.jpg"),
+        )
+      ),
+    );
+  }
+}
+
+
+class MovieListViewDetails extends StatelessWidget {
+
+  final String movieName;
+  final Movie movie;
+  const MovieListViewDetails({Key key, this.movieName, this.movie}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Movie: ${this.movie.title}"),
+        backgroundColor: Colors.blueGrey.shade900,
+      ),
+      body: Center(
+        child: Container(
+          child: RaisedButton(
+            child: Text('Go back'),
+            onPressed: (){
+              Navigator.pop(context);
+            },
+          ),
         ),
       ),
     );
